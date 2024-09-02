@@ -39,7 +39,7 @@ export const getProduct = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
-  const product = await getProductByIdService(parseInt(id));
+  const product = await getProductByIdService(Number(id));
 
   if (!product) {
     return res.status(404).json({
@@ -60,6 +60,7 @@ export const createProduct = async (
 ): Promise<Response> => {
   try {
     const errors = productValidator(req.body);
+
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({
         status: "error",
@@ -67,8 +68,24 @@ export const createProduct = async (
         errors,
       });
     }
+
     const newId = Date.now();
-    const newProduct: IProduct = { id: newId, ...req.body };
+
+    const newProduct: IProduct = {
+      id: newId,
+      name: req.body.name!,
+      description: req.body.description!,
+      price: req.body.price!,
+      category: req.body.category!,
+      stock: req.body.stock!,
+      tags: req.body.tags || [],
+      rating: req.body.rating || 0,
+      deleted: req.body.deleted || false,
+      manufacturer: req.body.manufacturer || {
+        name: "",
+        address: { street: "", city: "", state: "", zip: "" },
+      },
+    };
 
     const createdProduct = await createProductService(newProduct);
     return res.status(201).json({
@@ -97,7 +114,7 @@ export const updateProductManufacturerAddressStreet = async (
     });
   }
   const updatedProduct = await updateProductAddressStreetService(
-    parseInt(id),
+    Number(id),
     street
   );
 
@@ -119,7 +136,7 @@ export const deleteProduct = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
-  const success = await deleteProductService(parseInt(id));
+  const success = await deleteProductService(Number(id));
 
   if (!success) {
     return res.status(404).json({
