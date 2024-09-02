@@ -17,11 +17,12 @@ export const createProductService = async (
 export const getAllProductsService = async (
   category?: string
 ): Promise<IProduct[]> => {
-  const data = await readProductsFromFile();
-  if (category) {
-    return data.products.filter((product) => product.category === category);
-  }
-  return data.products;
+  const { products } = await readProductsFromFile();
+
+  return products.filter(
+    (product) =>
+      (!category || product.category === category) && !product.deleted
+  );
 };
 
 export const getProductByIdService = async (

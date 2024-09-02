@@ -16,7 +16,7 @@ export const getProducts = async (
   try {
     const { category } = req.query;
 
-    const validCategory = QueryToEnumMap[(category as string).toLowerCase()];
+    const validCategory = QueryToEnumMap[(category as string)?.toLowerCase()];
 
     const products = await getAllProductsService(validCategory);
 
