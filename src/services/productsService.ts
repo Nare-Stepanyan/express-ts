@@ -3,7 +3,6 @@ import {
   readProductsFromFile,
   writeProductsToFile,
 } from "../helpers/productsFileReadWrite";
-import { ProductCategoryEnum } from "../types/enums/product-category.enum";
 
 export const createProductService = async (
   newProduct: IProduct
