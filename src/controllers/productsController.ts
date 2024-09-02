@@ -8,6 +8,7 @@ import {
   updateProductService,
 } from "../services/productsService";
 import { QueryToEnumMap } from "../types/enums/product-category.enum";
+import { productValidator } from "../helpers/validateProductsFields";
 
 export const getProducts = async (
   req: Request,
@@ -58,11 +59,18 @@ export const createProduct = async (
   res: Response
 ): Promise<Response> => {
   try {
+    const errors = productValidator(req.body);
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({
+        status: "error",
+        message: "Validation failed",
+        errors,
+      });
+    }
     const newId = Date.now();
     const newProduct: IProduct = { id: newId, ...req.body };
 
     const createdProduct = await createProductService(newProduct);
-
     return res.status(201).json({
       status: "success",
       product: createdProduct,
