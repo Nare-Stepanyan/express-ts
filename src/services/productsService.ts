@@ -32,9 +32,9 @@ export const getProductByIdService = async (
   return data.products.find((product) => product.id === id);
 };
 
-export const updateProductService = async (
+export const updateProductAddressStreetService = async (
   id: number,
-  updatedData: Partial<IProduct>
+  street: string
 ): Promise<IProduct | null> => {
   const data = await readProductsFromFile();
   const productIndex = data.products.findIndex((product) => product.id === id);
@@ -43,8 +43,25 @@ export const updateProductService = async (
     return null;
   }
 
-  const updatedProduct = { ...data.products[productIndex], ...updatedData };
-  data.products[productIndex] = updatedProduct;
+  const updatedProduct = data.products[productIndex];
+  if (updatedProduct.manufacturer) {
+    updatedProduct.manufacturer.address = {
+      ...updatedProduct.manufacturer.address,
+      street,
+    };
+  } else {
+    updatedProduct.manufacturer = {
+      name: "",
+      country: "",
+      address: {
+        street,
+        city: "",
+        state: "",
+        zip: "",
+      },
+    };
+  }
+
   await writeProductsToFile(data);
 
   return updatedProduct;

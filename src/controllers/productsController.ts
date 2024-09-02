@@ -5,7 +5,7 @@ import {
   deleteProductService,
   getAllProductsService,
   getProductByIdService,
-  updateProductService,
+  updateProductAddressStreetService,
 } from "../services/productsService";
 import { QueryToEnumMap } from "../types/enums/product-category.enum";
 import { productValidator } from "../helpers/validateProductsFields";
@@ -83,12 +83,23 @@ export const createProduct = async (
   }
 };
 
-export const updateProduct = async (
+export const updateProductManufacturerAddressStreet = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
-  const updatedProduct = await updateProductService(parseInt(id), req.body);
+  const street = req.body.street as string;
+
+  if (!street) {
+    return res.status(400).json({
+      status: "error",
+      message: "Street field is required for update",
+    });
+  }
+  const updatedProduct = await updateProductAddressStreetService(
+    parseInt(id),
+    street
+  );
 
   if (!updatedProduct) {
     return res.status(404).json({
