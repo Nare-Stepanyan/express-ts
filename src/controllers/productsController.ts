@@ -7,13 +7,19 @@ import {
   getProductByIdService,
   updateProductService,
 } from "../services/productsService";
+import { QueryToEnumMap } from "../types/enums/product-category.enum";
 
 export const getProducts = async (
-  _req: Request,
+  req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const products = await getAllProductsService();
+    const { category } = req.query;
+
+    const validCategory = QueryToEnumMap[(category as string).toLowerCase()];
+
+    const products = await getAllProductsService(validCategory);
+
     return res.status(200).json({
       status: "success",
       result: products.length,

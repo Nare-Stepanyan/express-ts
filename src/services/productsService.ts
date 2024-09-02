@@ -3,6 +3,7 @@ import {
   readProductsFromFile,
   writeProductsToFile,
 } from "../helpers/productsFileReadWrite";
+import { ProductCategoryEnum } from "../types/enums/product-category.enum";
 
 export const createProductService = async (
   newProduct: IProduct
@@ -13,8 +14,13 @@ export const createProductService = async (
   return newProduct;
 };
 
-export const getAllProductsService = async (): Promise<IProduct[]> => {
+export const getAllProductsService = async (
+  category?: string
+): Promise<IProduct[]> => {
   const data = await readProductsFromFile();
+  if (category) {
+    return data.products.filter((product) => product.category === category);
+  }
   return data.products;
 };
 
