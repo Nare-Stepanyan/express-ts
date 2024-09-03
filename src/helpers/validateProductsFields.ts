@@ -1,4 +1,4 @@
-import { ProductCategoryEnum } from "../types/enums/product-category.enum";
+import { QueryToEnumMap } from "../types/enums/product-category.enum";
 import { IProduct } from "../types/interfaces/product.interface";
 
 type ProductValidationErrors = {
@@ -26,7 +26,16 @@ export const productValidator = (
   }
   if (!category) {
     errors.category = "Category is required";
+  } else {
+    const validCategory = QueryToEnumMap[(category as string)?.toLowerCase()];
+
+    if (!validCategory) {
+      errors.category = `Invalid category: ${category}\n Available categories are: ${Object.keys(
+        QueryToEnumMap
+      )}`;
+    }
   }
+
   if (!stock || stock.available === undefined || stock.available < 0) {
     errors.stockAvailable = "Stock available must be a non-negative integer";
   }
