@@ -3,6 +3,8 @@ import {
   readProductsFromFile,
   writeProductsToFile,
 } from "../helpers/productsFileReadWrite";
+import { findProductIndexById } from "../helpers/findProductById";
+import { updateManufacturerAddress } from "../helpers/updateManufacturerAddress";
 
 export const createProductService = async (
   newProduct: IProduct
@@ -26,11 +28,13 @@ export const getAllProductsService = async (
 
 export const getProductByIdService = async (
   id: number
-): Promise<IProduct | undefined> => {
+): Promise<IProduct | null> => {
   const data = await readProductsFromFile();
-  return data.products.find(
-    (product) => Number(product.id) === id && !product.deleted
-  );
+  const productIndex = findProductIndexById(data.products, id);
+  if (productIndex === -1) {
+    return null;
+  }
+  return data.products[productIndex];
 };
 
 export const updateProductAddressStreetService = async (
@@ -38,32 +42,16 @@ export const updateProductAddressStreetService = async (
   street: string
 ): Promise<IProduct | null> => {
   const data = await readProductsFromFile();
-  const productIndex = data.products.findIndex(
-    (product) => Number(product.id) === id && !product.deleted
-  );
+  const productIndex = findProductIndexById(data.products, id);
 
   if (productIndex === -1) {
     return null;
   }
 
-  const updatedProduct = data.products[productIndex];
-  if (updatedProduct.manufacturer) {
-    updatedProduct.manufacturer.address = {
-      ...updatedProduct.manufacturer.address,
-      street,
-    };
-  } else {
-    updatedProduct.manufacturer = {
-      name: "",
-      country: "",
-      address: {
-        street,
-        city: "",
-        state: "",
-        zip: "",
-      },
-    };
-  }
+  const updatedProduct = updateManufacturerAddress(
+    data.products[productIndex],
+    street
+  );
 
   await writeProductsToFile(data);
 
@@ -72,9 +60,8 @@ export const updateProductAddressStreetService = async (
 
 export const deleteProductService = async (id: number): Promise<boolean> => {
   const data = await readProductsFromFile();
-  const productIndex = data.products.findIndex(
-    (product) => Number(product.id) === id && !product.deleted
-  );
+  const productIndex = findProductIndexById(data.products, id);
+
   if (productIndex === -1) {
     return false;
   }
