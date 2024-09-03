@@ -1,4 +1,4 @@
-import { QueryToEnumMap } from "../types/enums/product-category.enum";
+import { ProductCategoryEnum } from "../types/enums/product-category.enum";
 import { IProduct } from "../types/interfaces/product.interface";
 
 type ProductValidationErrors = {
@@ -27,11 +27,11 @@ export const productValidator = (
   if (!category) {
     errors.category = "Category is required";
   } else {
-    const validCategory = QueryToEnumMap[(category as string)?.toLowerCase()];
+    const validCategory = Object.values(ProductCategoryEnum).includes(category);
 
     if (!validCategory) {
-      errors.category = `Invalid category: ${category}\n Available categories are: ${Object.keys(
-        QueryToEnumMap
+      errors.category = `Invalid category: ${category}. - Available categories are: ${Object.values(
+        ProductCategoryEnum
       )}`;
     }
   }

@@ -14,9 +14,7 @@ export const getProducts = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<Response> => {
-    const products = await getAllProductsService(
-      req.query.validCategory as string
-    );
+    const products = await getAllProductsService(req.query.category as string);
 
     return res.status(200).json({
       status: "success",
