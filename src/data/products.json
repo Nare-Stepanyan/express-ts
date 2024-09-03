@@ -428,7 +428,7 @@
         "automation"
       ],
       "rating": 4.6,
-      "deleted": false,
+      "deleted": true,
       "manufacturer": {
         "name": "",
         "country": "",
@@ -458,7 +458,16 @@
         "automation"
       ],
       "rating": 4.7,
-      "deleted": false
+      "deleted": false,
+      "manufacturer": {
+        "name": "",
+        "country": "",
+        "address": {
+          "city": "",
+          "state": "",
+          "zip": ""
+        }
+      }
     },
     {
       "id": "23",
@@ -2352,6 +2361,29 @@
         "name": "",
         "address": {
           "street": "",
+          "city": "",
+          "state": "",
+          "zip": ""
+        }
+      }
+    },
+    {
+      "id": 1725352352079,
+      "name": "Wireless Mouse",
+      "description": "Ergonomic wireless mouse with customizable buttons",
+      "price": 100,
+      "category": "Electronics",
+      "stock": {
+        "available": 200,
+        "reserved": 10,
+        "location": "Warehouse A"
+      },
+      "tags": [],
+      "rating": 0,
+      "deleted": true,
+      "manufacturer": {
+        "name": "",
+        "address": {
           "city": "",
           "state": "",
           "zip": ""
