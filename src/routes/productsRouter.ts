@@ -6,14 +6,17 @@ import {
   getProducts,
   updateProductManufacturerAddressStreet,
 } from "../controllers/productsController";
+import { checkProduct } from "../middlewares/productNotFound.middleware";
 
 const router = Router();
+router.param("id", checkProduct);
 
-router.get("/", getProducts).post("/", createProduct);
+router.route("/").get(getProducts).post(createProduct);
 
 router
-  .get("/:id", getProduct)
-  .patch("/:id", updateProductManufacturerAddressStreet)
-  .delete("/:id", deleteProduct);
+  .route("/:id")
+  .get(getProduct)
+  .patch(updateProductManufacturerAddressStreet)
+  .delete(deleteProduct);
 
 export default router;

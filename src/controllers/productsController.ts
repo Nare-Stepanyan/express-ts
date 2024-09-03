@@ -41,13 +41,6 @@ export const getProduct = async (
   const { id } = req.params;
   const product = await getProductByIdService(Number(id));
 
-  if (!product) {
-    return res.status(404).json({
-      status: "error",
-      message: "Product not found",
-    });
-  }
-
   return res.status(200).json({
     status: "success",
     data: product,
@@ -118,13 +111,6 @@ export const updateProductManufacturerAddressStreet = async (
     street
   );
 
-  if (!updatedProduct) {
-    return res.status(404).json({
-      status: "error",
-      message: "Product not found",
-    });
-  }
-
   return res.status(200).json({
     status: "success",
     product: updatedProduct,
@@ -136,14 +122,7 @@ export const deleteProduct = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
-  const success = await deleteProductService(Number(id));
-
-  if (!success) {
-    return res.status(404).json({
-      status: "error",
-      message: "Product not found",
-    });
-  }
+  await deleteProductService(Number(id));
 
   return res.status(204).json({
     status: "success",

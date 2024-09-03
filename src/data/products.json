@@ -78,12 +78,12 @@
         "portable"
       ],
       "rating": 4.8,
-      "deleted": false,
+      "deleted": true,
       "manufacturer": {
         "name": "",
         "country": "",
         "address": {
-          "street": "Amiryan",
+          "street": "Mashtots",
           "city": "",
           "state": "",
           "zip": ""
@@ -2302,6 +2302,30 @@
     },
     {
       "id": 1725311421724,
+      "name": "Wireless Mouse",
+      "description": "Ergonomic wireless mouse with customizable buttons",
+      "price": 100,
+      "category": "Electronics",
+      "stock": {
+        "available": 200,
+        "reserved": 10,
+        "location": "Warehouse A"
+      },
+      "tags": [],
+      "rating": 0,
+      "deleted": false,
+      "manufacturer": {
+        "name": "",
+        "address": {
+          "street": "",
+          "city": "",
+          "state": "",
+          "zip": ""
+        }
+      }
+    },
+    {
+      "id": 1725312929986,
       "name": "Wireless Mouse",
       "description": "Ergonomic wireless mouse with customizable buttons",
       "price": 100,
