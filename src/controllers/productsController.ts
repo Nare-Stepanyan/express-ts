@@ -7,19 +7,15 @@ import {
   getProductByIdService,
   updateProductAddressStreetService,
 } from "../services/productsService";
-import { QueryToEnumMap } from "../types/enums/product-category.enum";
-import { productValidator } from "../helpers/validateProductsFields";
 
 export const getProducts = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    const { category } = req.query;
-
-    const validCategory = QueryToEnumMap[(category as string)?.toLowerCase()];
-
-    const products = await getAllProductsService(validCategory);
+    const products = await getAllProductsService(
+      req.query.validCategory as string
+    );
 
     return res.status(200).json({
       status: "success",
@@ -38,13 +34,19 @@ export const getProduct = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { id } = req.params;
-  const product = await getProductByIdService(Number(id));
+  try {
+    const product = await getProductByIdService(Number(req.params.id));
 
-  return res.status(200).json({
-    status: "success",
-    data: product,
-  });
+    return res.status(200).json({
+      status: "success",
+      data: product,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err instanceof Error && err.message,
+    });
+  }
 };
 
 export const createProduct = async (
@@ -52,25 +54,7 @@ export const createProduct = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const newId = Date.now();
-
-    const newProduct: IProduct = {
-      id: newId,
-      name: req.body.name!,
-      description: req.body.description!,
-      price: req.body.price!,
-      category: req.body.category!,
-      stock: req.body.stock!,
-      tags: req.body.tags || [],
-      rating: req.body.rating || 0,
-      deleted: req.body.deleted || false,
-      manufacturer: req.body.manufacturer || {
-        name: "",
-        address: { street: "", city: "", state: "", zip: "" },
-      },
-    };
-
-    const createdProduct = await createProductService(newProduct);
+    const createdProduct = await createProductService(req.body);
     return res.status(201).json({
       status: "success",
       product: createdProduct,
@@ -87,35 +71,39 @@ export const updateProductManufacturerAddressStreet = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { id } = req.params;
-  const street = req.body.street as string;
+  try {
+    const updatedProduct = await updateProductAddressStreetService(
+      Number(req.params.id),
+      req.query.street as string
+    );
 
-  if (!street) {
-    return res.status(400).json({
+    return res.status(200).json({
+      status: "success",
+      product: updatedProduct,
+    });
+  } catch (err) {
+    return res.status(500).json({
       status: "error",
-      message: "Street field is required for update",
+      message: err instanceof Error && err.message,
     });
   }
-  const updatedProduct = await updateProductAddressStreetService(
-    Number(id),
-    street
-  );
-
-  return res.status(200).json({
-    status: "success",
-    product: updatedProduct,
-  });
 };
 
 export const deleteProduct = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { id } = req.params;
-  await deleteProductService(Number(id));
+  try {
+    await deleteProductService(Number(req.params.id));
 
-  return res.status(204).json({
-    status: "success",
-    message: "Product deleted",
-  });
+    return res.status(204).json({
+      status: "success",
+      message: "Product deleted",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: "error",
+      message: err instanceof Error && err.message,
+    });
+  }
 };
