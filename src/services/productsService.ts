@@ -31,9 +31,7 @@ export const getProductByIdService = async (
 ): Promise<IProduct | null> => {
   const data = await readProductsFromFile();
   const productIndex = findProductIndexById(data.products, id);
-  if (productIndex === -1) {
-    return null;
-  }
+
   return data.products[productIndex];
 };
 
@@ -43,10 +41,6 @@ export const updateProductAddressStreetService = async (
 ): Promise<IProduct | null> => {
   const data = await readProductsFromFile();
   const productIndex = findProductIndexById(data.products, id);
-
-  if (productIndex === -1) {
-    return null;
-  }
 
   const updatedProduct = updateManufacturerAddress(
     data.products[productIndex],
@@ -61,10 +55,6 @@ export const updateProductAddressStreetService = async (
 export const deleteProductService = async (id: number): Promise<boolean> => {
   const data = await readProductsFromFile();
   const productIndex = findProductIndexById(data.products, id);
-
-  if (productIndex === -1) {
-    return false;
-  }
 
   data.products[productIndex].deleted = true;
 

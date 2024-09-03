@@ -52,16 +52,6 @@ export const createProduct = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const errors = productValidator(req.body);
-
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json({
-        status: "error",
-        message: "Validation failed",
-        errors,
-      });
-    }
-
     const newId = Date.now();
 
     const newProduct: IProduct = {

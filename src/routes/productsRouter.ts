@@ -7,11 +7,12 @@ import {
   updateProductManufacturerAddressStreet,
 } from "../controllers/productsController";
 import { checkProduct } from "../middlewares/productNotFound.middleware";
+import { validateProductCreation } from "../middlewares/productCreationValidation.middleware";
 
 const router = Router();
 router.param("id", checkProduct);
 
-router.route("/").get(getProducts).post(createProduct);
+router.route("/").get(getProducts).post(validateProductCreation, createProduct);
 
 router
   .route("/:id")

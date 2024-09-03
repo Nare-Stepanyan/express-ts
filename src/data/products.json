@@ -428,7 +428,17 @@
         "automation"
       ],
       "rating": 4.6,
-      "deleted": false
+      "deleted": false,
+      "manufacturer": {
+        "name": "",
+        "country": "",
+        "address": {
+          "street": "Mashtots",
+          "city": "",
+          "state": "",
+          "zip": ""
+        }
+      }
     },
     {
       "id": "22",
